@@ -18,6 +18,7 @@ async function addActivityToRoutine({
     throw error;
   }
 }
+
 async function getAllRoutineActivities() {
   try {
     const {rows} = await client.query(`

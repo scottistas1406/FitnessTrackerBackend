@@ -40,11 +40,47 @@ async function getUser({ username, password }) {
 }
 
 async function getUserById(userId) {
-  // Implement the logic to retrieve a user by their user ID
+  try {
+    const {
+      rows: [user],
+    } = await client.query(
+      `
+      SELECT *
+      FROM users
+      WHERE id = $1;
+    `,
+      [userId]
+    );
+
+    if (!user) return null;
+
+    delete user.password;
+    return user;
+  } catch (error) {
+    throw error;
+  }
 }
 
 async function getUserByUsername(userName) {
-  // Implement the logic to retrieve a user by their username
+  // first get the user
+  try {
+    const { rows } = await client.query(
+      `
+      SELECT *
+      FROM users
+      WHERE username = $1;
+    `,
+      [userName]
+    );
+    // if it doesn't exist, return null
+    if (!rows || !rows.length) return null;
+
+    const [user] = rows;
+    // delete user.password;
+    return user;
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 module.exports = {

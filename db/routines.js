@@ -41,7 +41,20 @@ async function getRoutinesWithoutActivities(){
   }
 }
 
-async function getAllRoutines() {}
+async function getAllRoutines() {
+  try {
+    const{rows: routines}= await client.query(`
+    SELECT routines.*,user.username AS "creatorName"
+    FROM routines 
+    JOIN users ON routines."creatorID"=users.id`);
+    for (let routine of routines){
+      routine.activities = await getActivitiesByRoutineId(routine.id);
+    }
+    return routines;
+  } catch (error){
+    throw error
+  }
+}
 
 async function getAllPublicRoutines() {}
 
