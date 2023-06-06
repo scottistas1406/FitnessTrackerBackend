@@ -81,25 +81,30 @@ async function getPublicRoutinesByUser({ username }) {}
 
 async function getPublicRoutinesByActivity({ id }) {}
 
-async function updateRoutine({id, ...fields}) {
+async function updateRoutine({ id, ...fields }) {
+  const setString = Object.keys(fields)
+    .map((key, index) => `"${key}"=$${index + 1}`)
+    .join(", ");
+  // return early if this is called without fields
+  if (setString.length === 0) {
+    return;
+  }
   try {
-    const toUpdate = {}
-    for(let column in fields) {
-      if(fields[column] !== undefined) toUpdate[column] = fields[column];
-    }
-    let routine;
-    if (util.dbFields(fields).insert.length > 0) {
-      const {rows} = await client.query(`
-          UPDATE routines 
-          SET ${ util.dbFields(toUpdate).insert }
-          WHERE id=${ id }
-          RETURNING *;
-      `, Object.values(toUpdate));
-      routine = rows[0];
-      return routine;
-    }
+    const {
+      rows: [routines],
+    } = await client.query(
+      `
+    UPDATE routines
+    SET ${setString}
+    WHERE id=${id}
+    RETURNING *;
+  `,
+      Object.values(fields)
+    );
+
+    return routines;
   } catch (error) {
-    throw error;
+    console.log(error);
   }
 }
 

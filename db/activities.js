@@ -53,15 +53,10 @@ async function createActivity({ name, description }){
 async function attachActivitiesToRoutines(routines) {}
 
 async function updateActivity({ id, ...fields }) {
-  // don't try to update the id
-  // do update the name and description
-  // return the updated activity
-  // build the set string
-
-  const setString = Object.keys(fields)
+   const setString = Object.keys(fields)
     .map((key, index) => `"${key}"=$${index + 1}`)
     .join(", ");
-  // return early if this is called without fields
+ 
   if (setString.length === 0) {
     return;
   }

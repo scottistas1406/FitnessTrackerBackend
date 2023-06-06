@@ -55,47 +55,20 @@ async function getRoutineActivitiesByRoutine({id}) {
     throw error;
   }
 }
-async function updateRoutine({id, ...fields}) {
-  try {
-    const toUpdate = {}
-    for(let column in fields) {
-      if(fields[column] !== undefined) toUpdate[column] = fields[column];
-    }
-    let routine;
-    if (util.dbFields(fields).insert.length > 0) {
-      const {rows} = await client.query(`
-          UPDATE routines 
-          SET ${ util.dbFields(toUpdate).insert }
-          WHERE id=${ id }
-          RETURNING *;
-      `, Object.values(toUpdate));
-      routine = rows[0];
-      return routine;
-    }
-  } catch (error) {
-    throw error;
-  }
-}
 
-async function updateRoutineActivity ({id, ...fields}) {
+
+async function updateRoutineActivity({ id, ...fields }) {
   try {
-    const toUpdate = {}
-    for(let column in fields) {
-      if(fields[column] !== undefined) toUpdate[column] = fields[column];
-    }
-    let routineActivity;
-    if (util.dbFields(fields).insert.length > 0) {
-      const {rows} = await client.query(`
-        UPDATE routine_activities
-        SET ${ util.dbFields(toUpdate).insert }
-        WHERE id = ${ id }
-        RETURNING *;
-      `, Object.values(toUpdate));
-      routineActivity = rows[0];
-      return routineActivity;
-    }
+    const { count, duration } = fields;
+    const {
+      rows: [activityroutine],
+    } = await client.query(
+      `UPDATE routine_activities SET count=$1, duration=$2 WHERE id=$3 RETURNING *`,
+      [count, duration, id]
+    );
+    return activityroutine;
   } catch (error) {
-    throw error;
+    console.log(error);
   }
 }
 
@@ -129,6 +102,5 @@ module.exports = {
   updateRoutineActivity,
   destroyRoutineActivity,
   canEditRoutineActivity,
-  updateRoutine,
   getAllRoutineActivities,
 };
