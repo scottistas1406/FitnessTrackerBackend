@@ -50,13 +50,30 @@ async function getAllRoutines() {
     for (let routine of routines){
       routine.activities = await getActivitiesByRoutineId(routine.id);
     }
+    console.log(routines);
     return routines;
   } catch (error){
     throw error
   }
 }
 
-async function getAllPublicRoutines() {}
+async function getAllPublicRoutines() {
+  try{
+    const {rows:routines} = await client.query(`
+    SELECT routines.*,users.username AS "creatorName"
+    FROM routines
+    JOIN users ON routines.'creatorID'=users.id
+    WHERE "isPublic'=true
+     `);
+     for (let routine of routines){
+      routine.activities =await getActivitiesByRoutineId(routine.id);
+           }
+           return routines;
+          } catch (error){
+            throw error
+          }
+  }
+
 
 async function getAllRoutinesByUser({ username }) {}
 
