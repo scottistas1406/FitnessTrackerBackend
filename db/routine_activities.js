@@ -1,5 +1,6 @@
 const client = require("./client");
 
+
 async function addActivityToRoutine({
   routineId,
   activityId,
@@ -50,6 +51,27 @@ async function getRoutineActivitiesByRoutine({id}) {
       WHERE "routineId" = ${id}
     `);
     return rows;
+  } catch (error) {
+    throw error;
+  }
+}
+async function updateRoutine({id, ...fields}) {
+  try {
+    const toUpdate = {}
+    for(let column in fields) {
+      if(fields[column] !== undefined) toUpdate[column] = fields[column];
+    }
+    let routine;
+    if (util.dbFields(fields).insert.length > 0) {
+      const {rows} = await client.query(`
+          UPDATE routines 
+          SET ${ util.dbFields(toUpdate).insert }
+          WHERE id=${ id }
+          RETURNING *;
+      `, Object.values(toUpdate));
+      routine = rows[0];
+      return routine;
+    }
   } catch (error) {
     throw error;
   }
@@ -107,5 +129,6 @@ module.exports = {
   updateRoutineActivity,
   destroyRoutineActivity,
   canEditRoutineActivity,
+  updateRoutine,
   getAllRoutineActivities,
 };
