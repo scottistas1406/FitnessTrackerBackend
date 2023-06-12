@@ -7,10 +7,13 @@ const cors = require("cors");
 // Middleware
 app.use(cors());
 
-// Health.js Route
-app.get("/api/health", (req, res) => {
-  res.json({ message: "Health.js API is running" });
-});
+//Body Parser
+app.use(express.json());
+
+// // Health.js Route
+// app.get("/api/health", (req, res) => {
+//   res.json({ message: "Health.js API is running" });
+// });
 
 // API Router
 app.use("/api", apiRouter);
