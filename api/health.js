@@ -1,8 +1,8 @@
-const express = require('express');
-const router = express.Router();
+// const express = require('express');
+// const router = express.Router();
 
-router.get('/health', async (req, res, next) => {
-    res.send("server is Healthy");
-});
+// router.get('/api/health', async (req, res, next) => {
+//   res.status(200).json({ message: "server is healthy" });
+// });
 
-module.exports = router;
+// module.exports = router;

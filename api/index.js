@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 
 // GET /api/health
-const healthRouter = require('./health');
-router.use('/health', healthRouter);
+// const healthRouter = require('./health');
+// router.use('/health', healthRouter);
 
 // ROUTER: /api/users
 const usersRouter = require('./users');
