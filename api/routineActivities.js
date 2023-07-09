@@ -1,6 +1,5 @@
 const express = require('express');
 const client = require("../db/client");
-//const { requireUser } = require("./utils");
 const router = express.Router();
 const { updateRoutineActivity, getRoutineActivityById, getRoutineById, destroyRoutineActivity} = require("../db");
 const{ UnauthorizedUpdateError, UnauthorizedDeleteError } = require('../errors')

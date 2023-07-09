@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { getRoutineById, addActivityToRoutine, getAllPublicRoutines, createRoutine, updateRoutine, destroyRoutine, getRoutineActivitiesByRoutine } = require('../db');
+const { getRoutineById, addActivityToRoutine, getAllPublicRoutines, createRoutine, updateRoutine, destroyRoutine } = require('../db');
 
 const { UnauthorizedError, UnauthorizedUpdateError, UnauthorizedDeleteError, DuplicateRoutineActivityError } = require('../errors');
 
